@@ -10,7 +10,7 @@ class Solution:
 
         result = 0
 
-        for i in range(0, 32):
+        for _ in range(0, 32):
             result = result << 1
             if (n & 1) == 1:
                 result += 1
