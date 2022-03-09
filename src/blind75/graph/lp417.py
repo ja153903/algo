@@ -36,4 +36,3 @@ class Solution:
             traverse(rows - 1, col, a_visited)
 
         return list(p_visited & a_visited)
-
