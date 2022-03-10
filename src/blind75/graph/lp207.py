@@ -9,6 +9,8 @@ Return true if you can finish all courses. Otherwise, return false.,
 === Solution ===
 
 This problem is equivalent to finding a cycle in a directed graph
+
+We solve this via topological sort
 """
 from typing import List
 from collections import defaultdict, deque
