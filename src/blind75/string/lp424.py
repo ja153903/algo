@@ -15,5 +15,3 @@ class Solution:
                 start += 1
 
         return len(s) - start
-
-

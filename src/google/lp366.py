@@ -24,7 +24,7 @@ class Solution:
         self.height(root, result)
 
         return result
-       
+
     def height(self, root: Optional[TreeNode], result: List[List[int]]) -> int:
         if not root:
             return -1
@@ -34,7 +34,7 @@ class Solution:
         # whenever we hit a new level, we add an empty list to the result
         if level == len(result):
             result.append([])
-        
+
         result[level].append(root.val)
 
         return level
