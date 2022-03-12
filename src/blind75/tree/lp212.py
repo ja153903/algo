@@ -38,9 +38,6 @@ as well as some typical DFS to go through all the positions
 """
 class Solution:
     def findWords(self, board: List[List[str]], words: List[str]) -> List[str]:
-        """
-        To solve this problem, we should go through ever possible word
-        """
         result = []
         trie = Trie()
         node = trie.root
