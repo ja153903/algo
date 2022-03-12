@@ -1,11 +1,10 @@
-from typing import Dict
-from dataclasses import dataclass, field
+import collections
 
 
-@dataclass
 class TrieNode:
-    has_word: bool = False
-    children: Dict[str, "TrieNode"] = field(default_factory=dict)
+    def __init__(self) -> None:
+        self.has_word = False
+        self.children = collections.defaultdict(TrieNode)
 
 
 class Trie:
@@ -16,8 +15,6 @@ class Trie:
         node = self.root
 
         for ch in word:
-            if ch not in node.children:
-                node.children[ch] = TrieNode()
             node = node.children[ch]
 
         node.has_word = True
