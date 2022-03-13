@@ -22,20 +22,10 @@ the previous row and we just check it against the current row.
 So we do something like previous_row = points[0] and then check
 every row.
 
-How can we optimize our previous approach?
-
-Note that we probably never want to bother with absolute values of j - i
-where this value is greater than 1.
-
-Can we then introduce this logic here? Suppose that we only want to compare 
-the difference between values next to each other? Is it possible to get
-the same result?
-[1, 2, 3],
-[1, 5, 1],
-[3, 1, 1]
-
-Suppose that previous = [1, 2, 3]
-Then the next row, how would we tabulate results?
+=== Optimal ===
+The idea with our optimal solution is that given some index j
+we're choosing choosing the max possible value from either j's left or right.
+We do this by precomputing the array of max values minus 1 from the left and from the right
 """
 
 
@@ -52,4 +42,38 @@ class Solution:
         return max(previous)
 
     def maxPoints(self, points: List[List[int]]) -> int:
-        pass
+        m, n = len(points), len(points[0])
+
+        if m == 1:
+            return max(points[0])
+
+        if n == 1:
+            return sum(sum(row) for row in points)
+
+        def left(lst: List[int]) -> int:
+            result = [lst[0]] + [0] * (n - 1)
+
+            for i in range(1, n):
+                result[i] = max(result[i - 1] - 1, lst[i])
+
+            return result
+
+        def right(lst: List[int]) -> int:
+            result = [0] * (n - 1) + [lst[-1]]
+
+            for i in range(n - 2, -1, -1):
+                result[i] = max(result[i + 1] - 1, lst[i])
+
+            return result
+
+        previous = points[0]
+
+        for i in range(m - 1):
+            lft, rgt, cur = left(previous), right(previous), [0] * n
+
+            for j in range(n):
+                cur[j] = points[i + 1][j] + max(lft[j], rgt[j])
+
+            previous = list(cur)
+
+        return max(previous)
