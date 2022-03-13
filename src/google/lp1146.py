@@ -1,32 +1,61 @@
-"""
-Implement a SnapshotArray that supports the following interface:
+from dataclasses import dataclass
+from collections import defaultdict
 
-* SnapshotArray(int length) initializes an array-like data structure with the given length.  Initially, each element equals 0.
-* void set(index, val) sets the element at the given index to be equal to val.
-* int snap() takes a snapshot of the array and returns the snap_id: the total number of times we called snap() minus 1.
-* int get(index, snap_id) returns the value at the given index, at the time we took the snapshot with the given snap_id
 
-=== Solution ===
-The idea here is to initialize a matrix with [-1, 0] where the first item is the snap_id and the second item is the value
 """
-from typing import List
-import bisect
+In terms of storing snapshots, the key will be the index
+of the array and the value should be the a list of objects
+that contain the value and the snap_id
+"""
+
+
+@dataclass
+class SnapshotNode:
+    val: int
+    snap_id: int
 
 
 class SnapshotArray:
     def __init__(self, length: int):
-        self.snap_logs: List[List[int]] = [[[-1, 0]] for _ in range(length)]
+        # key is the index, value is a list of SnapshotNodes
+        self.snapshots = defaultdict(list)
         self.snap_id = 0
 
     def set(self, index: int, val: int) -> None:
-        self.snap_logs[index].append([self.snap_id, val])
+        if (
+            index in self.snapshots
+            and self.snapshots[index][-1].snap_id == self.snap_id
+        ):
+            self.snapshots[index][-1].val = val
+        else:
+            self.snapshots[index].append(SnapshotNode(val, self.snap_id))
 
     def snap(self) -> int:
         self.snap_id += 1
-
         return self.snap_id - 1
 
     def get(self, index: int, snap_id: int) -> int:
-        i = bisect.bisect(self.snap_logs[index], [snap_id + 1]) - 1
+        values_at_index = self.snapshots.get(index)
+        if not values_at_index:
+            return 0
 
-        return self.snap_logs[index][i][1]
+        # these are sorted nodes.
+        left, right = 0, len(values_at_index) - 1
+        answer = -1
+
+        # we use this non-standard binary search  because
+        # we don't necessarily set values at the right snap_id
+        # so we just query the largest possible snap_id that is less than
+        # the snap_id we want
+        while left <= right:
+            mid = (left + right) // 2
+            if values_at_index[mid].snap_id <= snap_id:
+                answer = mid
+                left = mid + 1
+            else:
+                right = mid - 1
+
+        if answer == -1:
+            return 0
+
+        return values_at_index[answer].val
