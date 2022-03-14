@@ -34,6 +34,8 @@ class Solution:
 
             h = 1 + max(height(node.left), height(node.right))
 
+            node.right, node.left = None, None
+
             nonlocal result
             if h == len(result):
                 result.append([])
