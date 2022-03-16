@@ -1,4 +1,9 @@
 # TODOs
 
-- [ ] Start contributing common algorithms that are tested
-- [ ] Get used to doing initial problem solving before looking at answer
+## Common Algorithms
+
+- [ ] Sliding Window Templates
+- [ ] Monotonic Stack
+- [ ] Minimum Spanning Trees
+- [x] Union Find (by rank)
+

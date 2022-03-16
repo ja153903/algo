@@ -11,8 +11,11 @@ class Solution:
         mp = {}
 
         for email in emails:
+            # split each email by @
             local_name, domain = email.split("@")
 
+            # check if a plus symbol exists
+            # if so then we should slice the string until the plus symbol
             plus_idx = local_name.find("+")
             if plus_idx == -1:
                 filtered_local_name = local_name
