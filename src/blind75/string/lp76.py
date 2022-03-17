@@ -24,7 +24,7 @@ class Solution:
                 curr_window_len = end - start + 1
 
                 if not min_window or curr_window_len < len(min_window):
-                    min_window = s[start:end + 1]
+                    min_window = s[start : end + 1]
 
                 count[s[start]] += 1
 
@@ -53,7 +53,7 @@ class Solution:
         while substr_len <= m:
             for i in range(m - substr_len + 1):
                 count = Counter(t)
-                substr = s[i:i + substr_len]
+                substr = s[i : i + substr_len]
                 for ch in substr:
                     if count.get(ch, -1) > 0:
                         count[ch] -= 1
