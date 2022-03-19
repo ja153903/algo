@@ -6,6 +6,12 @@ Find two lines that together with the x-axis form a container, such that the con
 Return the maximum amount of water a container can store.
 
 Notice that you may not slant the container.
+
+=== Retrospective ===
+The idea with this solution is that we take the left and right sides
+an see what the current area would be if we started at the edges
+if the current left value is less than the right value we increment that pointer
+otherwise we increment the right pointer.
 """
 from typing import List
 
