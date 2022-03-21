@@ -46,6 +46,9 @@ class Solution:
         dp = [0] * (n + 1)
 
         for i in range(1, n + 1):
+            # we're doing a right shift on i so that we can build
+            # on a previously populated solution and then adding 1
+            # if the end of current bit is a 1
             dp[i] = dp[i >> 1] + (i & 1)
 
         return dp

@@ -11,60 +11,49 @@ sorted in lexicographically increasing order by the new language's rules.
 If there is no solution, return "'. If there are multiple solutions,
 return any of them.
 
-=== Solution ===
-This problem is looking for some sort of topological sort
-
-TODO: Didn't finish this problem
+--------
+Approach
+--------
+This is a topological sort problem. The toughest part here is understanding
+how the question works.
 """
 from typing import List
+from collections import defaultdict, Counter, deque
 
 
 class Solution:
     def alienOrder(self, words: List[str]) -> str:
-        adj = [[False for _ in range(26)] for _ in range(26)]
-        visited = [0] * 26
+        # Step 0: create data structures + the indegree of each unique letter to 0.
+        adj_list = defaultdict(set)
+        indegree = Counter({c: 0 for word in words for c in word})
 
-        self.build_graph(words, adj, visited)
-
-        sb = []
-
-        for i in range(26):
-            if visited[i] == 0:
-                if not self.dfs(adj, visited, sb, i):
+        # Step 1: We need to populate adj_list and indegree.
+        # For each pair of adjacent words...
+        for first_word, second_word in zip(words, words[1:]):
+            for c, d in zip(first_word, second_word):
+                if c != d:
+                    if d not in adj_list[c]:
+                        adj_list[c].add(d)
+                        indegree[d] += 1
+                    break
+            else:  # Check that second word isn't a prefix of first word.
+                if len(second_word) < len(first_word):
                     return ""
 
-        return "".join(sb[::-1])
+        # Step 2: We need to repeatedly pick off nodes with an indegree of 0.
+        output = []
+        queue = deque([c for c in indegree if indegree[c] == 0])
+        while queue:
+            c = queue.popleft()
+            output.append(c)
+            for d in adj_list[c]:
+                indegree[d] -= 1
+                if indegree[d] == 0:
+                    queue.append(d)
 
-    def dfs(
-        self, adj: List[List[bool]], visited: List[int], sb: List[str], i: int
-    ) -> bool:
-        visited[i] = 1  # 1 = currently visiting
-        for j in range(26):
-            if adj[i][j]:
-                if visited[j] == 1:
-                    return False
-                if visited[j] == 0:
-                    if not self.dfs(adj, visited, sb, j):
-                        return False
-        visited[i] = 2  # 2 = visited
-        sb.append(chr(i + 97))
-
-        return True
-
-    def build_graph(
-        self, words: List[str], adj: List[List[bool]], visited: List[int]
-    ) -> None:
-        visited = [-1 for _ in visited]
-
-        for i in range(len(words)):
-            for ch in words[i]:
-                visited[ord(ch) - 97] = 0
-
-            if i > 0:
-                w1, w2 = words[i - 1], words[i - 2]
-                length = min(len(w1), len(w2))
-                for j in range(length):
-                    c1, c2 = w1[j], w2[j]
-                    if c1 != c2:
-                        adj[ord(c1) - 97][ord(c2) - 97] = True
-                        break
+        # If not all letters are in output, that means there was a cycle and so
+        # no valid ordering. Return "" as per the problem description.
+        if len(output) < len(indegree):
+            return ""
+        # Otherwise, convert the ordering we found into a string and return it.
+        return "".join(output)

@@ -9,11 +9,14 @@ class Solution:
         if not intervals:
             return 0
 
+        # sort by the end
         intervals.sort(key=lambda interval: interval[1])
         end = intervals[0][1]
         count = 1
 
         for i in range(1, len(intervals)):
+            # if the current start is greater than or equal to end
+            # increment the count as we've found a non-overlapping interval
             if intervals[i][0] >= end:
                 count += 1
                 end = intervals[i][1]

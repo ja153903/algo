@@ -22,6 +22,12 @@ e 0 1 1 2 2 3
 
 What we're seeing here is that when we compare them in a matrix, we can keep tabs
 on how long the subsequence can go
+
+Approach
+--------
+When trying to find the longest common subsequence. We can use a matrix
+where the rows are the indices for one string and the cols are the indices
+for the other string
 """
 
 

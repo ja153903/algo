@@ -17,6 +17,7 @@ class Codec:
             result.append("X")
             result.append(",")
         else:
+            # Do a preorder traversal here
             result.append(str(node.val))
             result.append(",")
             self.build_string(node.left, result)
