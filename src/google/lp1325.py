@@ -3,6 +3,9 @@ from data_structures.tree import TreeNode
 from typing import Optional
 
 
+# This problem should scream postorder traversal
+# since we want to work with the values with a
+# bottom-up approach
 class Solution:
     def removeLeafNodes(
         self, root: Optional[TreeNode], target: int

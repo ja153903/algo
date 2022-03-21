@@ -43,12 +43,10 @@ class SnapshotArray:
         left, right = 0, len(values_at_index) - 1
         answer = -1
 
-        # we use this non-standard binary search  because
-        # we don't necessarily set values at the right snap_id
-        # so we just query the largest possible snap_id that is less than
-        # the snap_id we want
         while left <= right:
             mid = (left + right) // 2
+            # this condition makes sure that we get the largest snap_id
+            # less than the target snap_id
             if values_at_index[mid].snap_id <= snap_id:
                 answer = mid
                 left = mid + 1
